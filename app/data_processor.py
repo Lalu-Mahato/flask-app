@@ -10,5 +10,9 @@ def process(df):
 
     unique_branches = validate_data.drop_duplicates(subset='Branch_Code')[['Branch_Code', 'Branch_Name']]
     unique_products = validate_data.drop_duplicates(subset='Product_Id')[['Product_Id','Product_Name']]
-    return unique_branches, unique_products
+    prospects = df[['Loan_Account_Number', 'Customer_Name', 'Mobile_Number', 'Customer_Address']]
+    loans = df[['Loan_Account_Number', 'Loan_Amount_Disbursed', 'Loan_Disbursement_Date', 
+                'Roi', 'Total_Tenure', 'Cif_Id', 'Branch_Code', 'Product_Id']]
+
+    return unique_branches, unique_products, prospects, loans
 
