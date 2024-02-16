@@ -45,6 +45,34 @@ def create_tables(conn):
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
+        """,
+        """
+            CREATE TABLE IF NOT EXISTS emis_master (
+                id SERIAL PRIMARY KEY,
+                account_number BIGINT NOT NULL,
+                emi_due_date VARCHAR(255) NOT NULL,
+                loan_outstanding FLOAT NOT NULL,
+                principal_outstanding FLOAT NOT NULL,
+                interest_outstanding FLOAT NOT NULL,
+                emi_amount FLOAT NOT NULL,
+                principal_amount FLOAT NOT NULL,
+                interest_amount FLOAT NOT NULL,                
+                arrear_Amount FLOAT NOT NULL,
+                principal_arrear FLOAT NOT NULL,
+                interest_arrear FLOAT NOT NULL,
+                other_charges FLOAT NOT NULL,
+                total_amount_collection FLOAT NOT NULL,
+                dpd_days INTEGER NOT NULL,
+                last_payment_date VARCHAR(255) NOT NULL,
+                last_paid_amount FLOAT NOT NULL,
+                last_emi_date VARCHAR(255) NOT NULL,
+                current_tenure INTEGER NOT NULL,
+                residual_tenure INTEGER NOT NULL,
+                unpaid_installments INTEGER NOT NULL,
+                total_installments INTEGER NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
         """)
     try:
         with conn.cursor() as cur:

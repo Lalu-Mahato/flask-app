@@ -71,8 +71,10 @@ def insert_prospect_details(prospects):
 def insert_loan(loan_json):
     cursor = conn.cursor()
     loan = json.loads(loan_json)
-    query = "INSERT INTO loans_master(account_number, disbursed_amount, disbursement_date, interest_rate, total_tenure, cif_id, branch_code, product_code) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    detail = (loan['Loan_Account_Number'], loan['Loan_Amount_Disbursed'], loan['Loan_Disbursement_Date'], loan['Roi'], loan['Total_Tenure'], loan['Cif_Id'], loan['Branch_Code'], loan['Product_Id'])
+    query = "INSERT INTO loans_master(account_number, disbursed_amount, disbursement_date, interest_rate, " \
+        "total_tenure, cif_id, branch_code, product_code) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    detail = (loan['Loan_Account_Number'], loan['Loan_Amount_Disbursed'], loan['Loan_Disbursement_Date'],
+              loan['Roi'], loan['Total_Tenure'], loan['Cif_Id'], loan['Branch_Code'], loan['Product_Id'])
 
     cursor.execute(query, detail)
     conn.commit()
@@ -86,3 +88,30 @@ def insert_loan_details(loans):
         
         loan_json = json.dumps(row)
         insert_loan(loan_json)
+
+def insert_emi(emi_json):
+    cursor = conn.cursor()
+    emi = json.loads(emi_json)
+    query = "INSERT INTO emis_master(account_number, emi_due_date, loan_outstanding, principal_outstanding, " \
+        "interest_outstanding, emi_amount, principal_amount, interest_amount, arrear_Amount, principal_arrear, " \
+        "interest_arrear, other_charges, total_amount_collection, dpd_days, last_payment_date, last_paid_amount, " \
+        "last_emi_date, current_tenure, residual_tenure, unpaid_installments, total_installments) " \
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    detail = (emi['Loan_Account_Number'], emi['Emi_Due_Date'], emi['Loan_Outstanding'], emi['Principal_Outstanding'],
+              emi['Interest_Outstanding'], emi['Emi_Amount'], emi['Principal_Amount'], emi['Interest_Amount'],
+              emi['Arrear_Amount'], emi['Principal_Arrear'], emi['Interest_Arrear'], emi['Other_Charges'],
+              emi['Total_Amount_Collection'], emi['Dpd'], emi['Last_Payment_Date'], emi['Last_Paid_Amount'],
+              emi['Last_Emi_Date'], emi['Current_Tenure'], emi['Residual_Tenure'], emi['UnPaid_Installments'],
+              emi['Total_Installments'])
+    
+    cursor.execute(query, detail)
+    conn.commit()
+    cursor.close()
+
+def insert_emi_details(emis):
+    for row in emis.to_dict(orient='records'):
+        for key, value in row.items():
+            if isinstance(value, pd.Timestamp):
+                row[key] = value.strftime('%Y-%m-%d')
+        emi_json = json.dumps(row)
+        insert_emi(emi_json)
