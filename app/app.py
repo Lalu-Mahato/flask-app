@@ -10,6 +10,8 @@ from db_operations import insert_emi_details
 
 # Connect to database
 conn = get_database_connection()
+if conn:
+    print('Connected to the database.')
 
 # Create tables
 create_tables(conn)
